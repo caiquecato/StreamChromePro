@@ -6,8 +6,8 @@ A Windows companion app and browser launcher for playing local videos in your br
 
 ## Install and open
 
-1. Download **StreamChromePro-Setup-2.4.0.exe** from Releases and run it. The application installs for your Windows account without an administrator prompt.
-2. FFmpeg and FFprobe are required. Install them from a trusted build linked by [FFmpeg](https://ffmpeg.org/download.html), then add their `bin` folder to PATH, or use `C:\Program Files\FFmpeg\bin`. They are **not bundled** in this release. Python is bundled; you do not need to install Python.
+1. Download **StreamChromePro-Setup-2.4.1.exe** from Releases and run it. The application installs for your Windows account without an administrator prompt.
+2. FFmpeg, FFprobe and Python are included. No separate installation or PATH configuration is needed.
 3. Open **StreamChrome PRO** from the Start menu. Choose **Open file**, then select your video. Files stay on your computer.
 4. Use **Exit** at the far right to stop the application. Closing the browser tab leaves the local server running. You can also right-click its tray icon and choose **Exit / Sair**.
 
@@ -15,7 +15,7 @@ A Windows companion app and browser launcher for playing local videos in your br
 
 The extension opens the installed StreamChrome PRO application from the browser toolbar.
 
-**Chrome / Chromium:** extract `StreamChromePro-Chromium-2.4.0.zip`. Open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select the extracted folder. Click the extension icon, then **Open player**.
+**Chrome / Chromium:** extract `StreamChromePro-Chromium-2.4.1.zip`. Open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select the extracted folder. Click the extension icon, then **Open player**.
 
 **Firefox:** the Firefox package is provided for temporary developer testing through `about:debugging` → This Firefox → Load Temporary Add-on. Permanent installation requires Mozilla signing; this release is not signed or listed in an add-on store.
 
@@ -35,9 +35,35 @@ Keys are protected with Windows DPAPI in your local application data, outside th
 
 Choose Cinema, Classic, Studio, Library or Quiet Glass under **Appearance**, with light/dark themes. The interface defaults to English and offers Portuguese and Spanish.
 
-![Studio interface](docs/figures/studio-interface.jpg)
+### Cinema
 
-Quiet Glass places translucent controls over the video.
+| Dark | Light |
+|---|---|
+| ![Cinema dark](docs/figures/cinema-dark.jpg) | ![Cinema light](docs/figures/cinema-light.jpg) |
+
+### Classic
+
+| Dark | Light |
+|---|---|
+| ![Classic dark](docs/figures/classic-dark.jpg) | ![Classic light](docs/figures/classic-light.jpg) |
+
+### Studio
+
+| Dark | Light |
+|---|---|
+| ![Studio dark](docs/figures/studio-dark.jpg) | ![Studio light](docs/figures/studio-light.jpg) |
+
+### Library
+
+| Dark | Light |
+|---|---|
+| ![Library dark](docs/figures/library-dark.jpg) | ![Library light](docs/figures/library-light.jpg) |
+
+### Quiet Glass
+
+| Dark | Light |
+|---|---|
+| ![Quiet Glass dark](docs/figures/glass-dark.jpg) | ![Quiet Glass light](docs/figures/glass-light.jpg) |
 
 Use **Original** mode to preserve supported HEVC, H.264 and AV1 video. Choose **H.264 compatibility** if the original format does not play; conversion may increase CPU usage.
 
@@ -48,7 +74,6 @@ For NVIDIA RTX Video, enable Super Resolution or HDR in the NVIDIA app and check
 - Windows 10/11, Chrome as primary browser. Other browsers require testing.
 - Supported media formats depend on the browser and FFmpeg. Subtitle timing varies between releases.
 - No code-signing certificate: Windows may display an unknown-publisher notice.
-- FFmpeg/FFprobe are separate prerequisites.
 - The browser extension is distributed for developer loading; store publication/signing is separate.
 
 ## Develop
@@ -61,4 +86,4 @@ The project runs only on loopback. The native bridge accepts the single `open` a
 
 Created by **OhCato**. [Support development](https://buymeacoffee.com/caique1704u).
 
-FFmpeg, Python, Pillow, pystray and browser APIs belong to their respective maintainers. FFmpeg is not redistributed in these releases. A project license has not yet been selected.
+FFmpeg, Python, Pillow, pystray and browser APIs belong to their respective maintainers. [FFmpeg distribution details and licenses](docs/THIRD_PARTY.md) are included with the installer. A project license has not yet been selected.

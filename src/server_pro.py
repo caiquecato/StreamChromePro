@@ -24,12 +24,15 @@ class HTTPServer(ThreadingHTTPServer):
 
 
 HOST, PORT = '127.0.0.1', 8780
-FFMPEG_BIN = r'C:\Program Files\FFmpeg\bin\ffmpeg.exe'
-FFPROBE_BIN = r'C:\Program Files\FFmpeg\bin\ffprobe.exe'
-if not os.path.isfile(FFMPEG_BIN):
-    FFMPEG_BIN = shutil.which('ffmpeg') or 'ffmpeg'
-if not os.path.isfile(FFPROBE_BIN):
-    FFPROBE_BIN = shutil.which('ffprobe') or 'ffprobe'
+APP_DIRECTORY = Path(sys.executable).parent if getattr(sys, 'frozen', False) else Path(__file__).resolve().parent.parent
+
+def find_media_tool(name):
+    bundled = APP_DIRECTORY / 'ffmpeg' / (name + '.exe')
+    system = Path(r'C:\Program Files\FFmpeg\bin') / (name + '.exe')
+    return str(bundled) if bundled.is_file() else str(system) if system.is_file() else shutil.which(name) or name
+
+FFMPEG_BIN = find_media_tool('ffmpeg')
+FFPROBE_BIN = find_media_tool('ffprobe')
 NO_WINDOW = subprocess.CREATE_NO_WINDOW if sys.platform == 'win32' else 0
 VIDEO_EXTENSIONS = {'.mp4', '.mkv', '.avi', '.mov', '.m4v', '.webm', '.ts', '.m2ts', '.mpg', '.mpeg', '.wmv'}
 LOCAL_FILES = OrderedDict()
@@ -220,7 +223,7 @@ class StreamProHandler(BaseHTTPRequestHandler):
             elif parsed.path == '/api/settings':
                 self.send_json(SUBTITLES.status())
             elif parsed.path == '/api/status':
-                self.send_json({'version': '2.4', 'ffmpeg': bool(shutil.which(FFMPEG_BIN)), 'ffprobe': bool(shutil.which(FFPROBE_BIN))})
+                self.send_json({'version': '2.4.1', 'ffmpeg': bool(shutil.which(FFMPEG_BIN)), 'ffprobe': bool(shutil.which(FFPROBE_BIN))})
             elif parsed.path == '/api/inspect':
                 raw = query.get('url', [''])[0]
                 source = resolve_target_url(raw)
