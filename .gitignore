@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+scratch/
+historico/
+dist/
+*.exe
+*.spec
+*.dat
+.env*
+*.log
+dados_brutos/
+planilhas/
+docs/plano*
+docs/README.md

@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "StreamChrome PRO Launcher",
+  "version": "2.4.0",
+  "description": "Open the installed StreamChrome PRO local video player.",
+  "permissions": [
+    "nativeMessaging"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA40cPay1blmsEAr+A0EtbJZPgrifA9Ra+s/yu6wnW4i8Z4Z74bVauW551HX+Sl9XCBGf2co7UWro7x3pRFPsqJSYrzLIxMtGsl+zgmV8TBPgYOtbfqCNGuIGGyqD6cuIYCU318NbR/aOE6RclZh9TQ1rJB5+neLDkaXVCG000nrpD8EsTrlsG/x0kYLgvhGfIqRJ7YFxlpG5VQT0szk58ovRf/JB4S7BZwMzLKMov5xYrxmShCBxvuLv+7ibvwsFWjQNCYwclETUkb8irQugpn5I+0z+AQtNS1zR7hQ1MmrQ8VK1R7+VOOorEtbSYLtXygjXRRNM/lg6NZNrgEQ8gLQIDAQAB"
+}

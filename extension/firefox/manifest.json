@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "StreamChrome PRO Launcher",
+  "version": "2.4.0",
+  "description": "Open the installed StreamChrome PRO local video player.",
+  "permissions": [
+    "nativeMessaging"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "streamchromepro@caiquecato.github.io",
+      "strict_min_version": "109.0"
+    }
+  }
+}

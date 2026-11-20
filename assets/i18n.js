@@ -1,0 +1,284 @@
+(function (root, factory) {
+    if (typeof module === 'object' && module.exports) module.exports = factory();
+    else root.PlayerI18n = factory();
+}(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+    'use strict';
+    // English is canonical. Exact fragments intentionally retain their spaces.
+    const entries = [
+        ['Exit', 'Sair', 'Salir'],
+        ['Exit player', 'Encerrar player', 'Cerrar reproductor'],
+        ['Player stopped. You can close this tab.', 'Player encerrado. Você pode fechar esta aba.', 'Reproductor cerrado. Puedes cerrar esta pestaña.'],
+        ['Subtitle loaded: {label}. Adjust the delay in Subtitle options if needed.', 'Legenda aberta: {label}. Se necessário, ajuste o atraso em Opções de legenda.', 'Subtítulo cargado: {label}. Ajusta el retraso en Opciones de subtítulos si es necesario.'],
+        ['Release / Title', 'Versão / Título', 'Versión / Título'],
+        ['Source', 'Provedor', 'Proveedor'],
+        ['Subtitle options', 'Opções de legenda', 'Opciones de subtítulos'],
+        ['Displayed image: {width} × {height} physical px.', 'Imagem exibida: {width} × {height} pixels físicos.', 'Imagen mostrada: {width} × {height} píxeles físicos.'],
+        ['The image is being enlarged.', 'A imagem está sendo ampliada.', 'La imagen se está ampliando.'],
+        ['The image is not being enlarged; test fullscreen for VSR.', 'A imagem não está sendo ampliada; teste tela cheia para o VSR.', 'La imagen no se está ampliando; prueba pantalla completa para VSR.'],
+        ['Open a local video or paste a video URL.', 'Abra um vídeo do PC ou cole um link de vídeo.', 'Abre un vídeo local o pega una URL de vídeo.'],
+        ['Switch to light theme', 'Ativar tema claro', 'Activar tema claro'],
+        ['Switch to dark theme', 'Ativar tema escuro', 'Activar tema oscuro'],
+        ['Appearance', 'Aparência', 'Apariencia'],
+        ['Layout', 'Layout', 'Diseño'],
+        ['Theme', 'Tema', 'Tema'],
+        ['Dark', 'Escuro', 'Oscuro'],
+        ['Light', 'Claro', 'Claro'],
+        ['Language', 'Idioma', 'Idioma'],
+        ['English', 'Inglês', 'Inglés'],
+        ['Português', 'Português', 'Português'],
+        ['Cinema', 'Cinema', 'Cinema'],
+        ['Classic', 'Classic', 'Classic'],
+        ['Studio', 'Studio', 'Studio'],
+        ['Library', 'Library', 'Library'],
+        ['Quiet Glass', 'Quiet Glass', 'Quiet Glass'],
+        ['Open file', 'Abrir arquivo', 'Abrir archivo'],
+        ['Open URL', 'Abrir URL', 'Abrir URL'],
+        ['Audio', 'Áudio', 'Audio'],
+        ['Subtitles', 'Legendas', 'Subtítulos'],
+        ['File', 'Arquivo', 'Archivo'],
+        ['Playback', 'Reprodução', 'Reproducción'],
+        ['View', 'Exibir', 'Ver'],
+        ['Settings', 'Configurações', 'Configuración'],
+        ['Current session', 'Sessão atual', 'Sesión actual'],
+        ['No file open', 'Nenhum arquivo aberto', 'Ningún archivo abierto'],
+        ['Close panel', 'Fechar painel', 'Cerrar panel'],
+        ['Load selected', 'Carregar seleção', 'Cargar selección'],
+        ['Release', 'Versão', 'Versión'],
+        ['Source', 'Origem', 'Origen'],
+        ['Subtitle language', 'Idioma da legenda', 'Idioma del subtítulo'],
+        ['Search results', 'Resultados da busca', 'Resultados de búsqueda'],
+        ['Search both services', 'Buscar nos dois serviços', 'Buscar en ambos servicios'],
+        ['Default track', 'Faixa principal', 'Pista principal'],
+        ['Off', 'Desativadas', 'Desactivados'],
+        ['Start video', 'Iniciar vídeo', 'Iniciar vídeo'],
+        ['Local player', 'Player local', 'Reproductor local'],
+        ['Open a video in the side panel to begin.', 'Abra um vídeo no painel ao lado para começar.', 'Abre un vídeo en el panel lateral para comenzar.'],
+        ['Video position', 'Posição do vídeo', 'Posición del vídeo'],
+        ['Play/Pause (Space)', 'Play/Pause (Espaço)', 'Reproducir/Pausar (Espacio)'],
+        ['Back 10s (←)', 'Voltar 10s (←)', 'Retroceder 10s (←)'],
+        ['Forward 10s (→)', 'Avançar 10s (→)', 'Avanzar 10s (→)'],
+        ['Mute (M)', 'Mudo (M)', 'Silenciar (M)'],
+        ['Fullscreen (F)', 'Tela Cheia (F)', 'Pantalla completa (F)'],
+        ['Picture-in-Picture', 'Picture-in-Picture', 'Picture-in-Picture'],
+        ['Playback information', 'Informações da reprodução', 'Información de reproducción'],
+        ['Media and subtitle controls', 'Controles de mídia e legendas', 'Controles de medios y subtítulos'],
+        ['Player panels', 'Painéis do player', 'Paneles del reproductor'],
+        ['Media', 'Mídia', 'Medios'],
+        ['Open video', 'Abrir vídeo', 'Abrir vídeo'],
+        ['Open a file from your PC', 'Abrir arquivo do PC', 'Abrir archivo del PC'],
+        ['The file stays on your computer.', 'O arquivo permanece no seu computador.', 'El archivo permanece en tu equipo.'],
+        ['The video stays on your computer.', 'O vídeo permanece no seu computador.', 'El vídeo permanece en tu equipo.'],
+        ['Or play a link', 'Ou reproduzir um link', 'O reproducir un enlace'],
+        ['Video link', 'Link do vídeo', 'Enlace del vídeo'],
+        ['Paste a video or Stremio link', 'Cole um link de vídeo ou do Stremio', 'Pega un enlace de vídeo o de Stremio'],
+        ['Paste link', 'Colar link', 'Pegar enlace'],
+        ['Play link', 'Reproduzir link', 'Reproducir enlace'],
+        ['Open in VLC', 'Abrir no VLC', 'Abrir en VLC'],
+        ['Audio track', 'Faixa de áudio', 'Pista de audio'],
+        ['Video mode', 'Modo de vídeo', 'Modo de vídeo'],
+        ['Original — preserve video', 'Original — preservar vídeo', 'Original — conservar vídeo'],
+        ['H.264 compatibility', 'Compatibilidade H.264', 'Compatibilidad H.264'],
+        ['Search both services and choose the release matching your file.', 'Busque nos dois serviços e escolha a versão do seu arquivo.', 'Busca en ambos servicios y elige la versión de tu archivo.'],
+        ['Active subtitle', 'Legenda ativa', 'Subtítulo activo'],
+        ['Open a subtitle from your PC', 'Abrir legenda do PC', 'Abrir subtítulo del PC'],
+        ['Appearance and synchronization', 'Aparência e sincronização', 'Apariencia y sincronización'],
+        ['Size', 'Tamanho', 'Tamaño'],
+        ['Small', 'Pequeno', 'Pequeño'],
+        ['Medium', 'Médio', 'Mediano'],
+        ['Large', 'Grande', 'Grande'],
+        ['Extra large', 'Muito grande', 'Muy grande'],
+        ['Color', 'Cor', 'Color'],
+        ['White', 'Branca', 'Blanco'],
+        ['Yellow', 'Amarela', 'Amarillo'],
+        ['Subtitle delay (s)', 'Atraso da legenda (s)', 'Retraso del subtítulo (s)'],
+        ['Positive: show later. Negative: show earlier.', 'Positivo: mostrar depois. Negativo: mostrar antes.', 'Positivo: mostrar después. Negativo: mostrar antes.'],
+        ['Movie or series', 'Filme ou série', 'Película o serie'],
+        ['E.g.: Dune: Part Two or tt15239678', 'Ex.: Duna: Parte Dois ou tt15239678', 'Ej.: Dune: Parte Dos o tt15239678'],
+        ['Type', 'Tipo', 'Tipo'],
+        ['Movie', 'Filme', 'Película'],
+        ['Series', 'Série', 'Serie'],
+        ['Portuguese (Brazil)', 'Português (Brasil)', 'Portugués (Brasil)'],
+        ['Portuguese (Portugal)', 'Português (Portugal)', 'Portugués (Portugal)'],
+        ['Spanish', 'Espanhol', 'Español'],
+        ['French', 'Francês', 'Francés'],
+        ['Italian', 'Italiano', 'Italiano'],
+        ['German', 'Alemão', 'Alemán'],
+        ['Japanese', 'Japonês', 'Japonés'],
+        ['Portuguese', 'Portugues', 'Portugués'],
+        ['Portuguese (Brazil)', 'Portugues (BR)', 'Portugués (Brasil)'],
+        ['English', 'Ingles', 'Inglés'],
+        ['French', 'Frances', 'Francés'],
+        ['German', 'Alemao', 'Alemán'],
+        ['Japanese', 'Japones', 'Japonés'],
+        ['Year (optional)', 'Ano (opcional)', 'Año (opcional)'],
+        ['E.g.: 2024', 'Ex.: 2024', 'Ej.: 2024'],
+        ['Season', 'Temporada', 'Temporada'],
+        ['Episode', 'Episódio', 'Episodio'],
+        ['Search when opening a video', 'Buscar ao abrir um vídeo', 'Buscar al abrir un vídeo'],
+        ['Search to see available subtitles', 'Faça uma busca para ver as legendas disponíveis', 'Haz una búsqueda para ver los subtítulos disponibles'],
+        ['Open selected subtitle', 'Abrir legenda selecionada', 'Abrir subtítulo seleccionado'],
+        ['Subtitle settings', 'Configurações de legendas', 'Configuración de subtítulos'],
+        ['Enter your keys once. They are protected by your Windows account and stored outside the project folder.', 'Cadastre suas chaves uma vez. Elas ficam protegidas pela sua conta do Windows, fora da pasta do projeto.', 'Introduce tus claves una vez. Tu cuenta de Windows las protege y se guardan fuera de la carpeta del proyecto.'],
+        ['SubDL API key', 'Chave de API do SubDL', 'Clave de API de SubDL'],
+        ['OpenSubtitles.com API key', 'Chave de API do OpenSubtitles.com', 'Clave de API de OpenSubtitles.com'],
+        ['Paste your SubDL key', 'Cole a chave do SubDL', 'Pega la clave de SubDL'],
+        ['Paste your OpenSubtitles key', 'Cole a chave do OpenSubtitles', 'Pega la clave de OpenSubtitles'],
+        ['OpenSubtitles.com username (optional)', 'Usuário OpenSubtitles.com (opcional)', 'Usuario de OpenSubtitles.com (opcional)'],
+        ['OpenSubtitles.com password (optional)', 'Senha OpenSubtitles.com (opcional)', 'Contraseña de OpenSubtitles.com (opcional)'],
+        ['To connect your account', 'Para conectar sua conta', 'Para conectar tu cuenta'],
+        ['Used only to sign in', 'Usada apenas para iniciar a sessão', 'Se usa solo para iniciar sesión'],
+        ['Save settings', 'Salvar configurações', 'Guardar configuración'],
+        ['Get a SubDL key', 'Obter chave SubDL', 'Obtener clave de SubDL'],
+        ['Get an OpenSubtitles.com key', 'Obter chave OpenSubtitles.com', 'Obtener clave de OpenSubtitles.com'],
+        ['Import your .org account', 'Importar conta do .org', 'Importar cuenta de .org'],
+        ['Empty key fields keep the current settings. An API key is required; a username and password alone are not enough. Import .org accounts into .com. Your password is not saved.', 'Campos de chave vazios preservam a configuração atual. É necessária uma chave de API; somente usuário e senha não bastam. Contas do .org devem ser importadas para o .com. A senha não é salva.', 'Los campos de clave vacíos conservan la configuración actual. Se requiere una clave de API; el usuario y la contraseña no bastan. Importa las cuentas de .org a .com. La contraseña no se guarda.'],
+        ['Could not complete the operation.', 'Não foi possível concluir a operação.', 'No se pudo completar la operación.'],
+        ['Select the video in the Windows dialog.', 'Selecione o vídeo na janela do Windows.', 'Selecciona el vídeo en la ventana de Windows.'],
+        ['Open a video from your PC or paste a link.', 'Abra um vídeo do PC ou cole um link.', 'Abre un vídeo del PC o pega un enlace.'],
+        ['Reading duration, video and audio tracks…', 'Lendo duração, vídeo e faixas de áudio…', 'Leyendo duración, vídeo y pistas de audio…'],
+        ['Playing: ', 'Reproduzindo: ', 'Reproduciendo: '],
+        ['Playing: {filename}', 'Reproduzindo: {filename}', 'Reproduciendo: {filename}'],
+        ['Preparing playback…', 'Preparando reprodução…', 'Preparando reproducción…'],
+        ['Click play to start. If the video does not load, try opening it in VLC.', 'Clique em reproduzir para iniciar. Se o vídeo não carregar, tente abrir no VLC.', 'Pulsa reproducir para comenzar. Si el vídeo no carga, intenta abrirlo en VLC.'],
+        ['Could not start the video.', 'Não foi possível iniciar o vídeo.', 'No se pudo iniciar el vídeo.'],
+        ['Chrome input: {width} × {height}. ', 'Entrada no Chrome: {width} × {height}. ', 'Entrada en Chrome: {width} × {height}. '],
+        ['RTX VSR: this input exceeds NVIDIA’s documented range (360p to 1440p).', 'RTX VSR: esta entrada excede a faixa documentada pela NVIDIA (360p a 1440p).', 'RTX VSR: esta entrada supera el rango documentado por NVIDIA (360p a 1440p).'],
+        ['To test RTX VSR, enlarge the video or use fullscreen and check the indicator in the NVIDIA app. This page cannot determine whether the driver enabled the effect.', 'Para testar RTX VSR, amplie o vídeo ou use tela cheia e confira o indicador no aplicativo NVIDIA. A página não consegue consultar se o driver ativou o efeito.', 'Para probar RTX VSR, amplía el vídeo o usa pantalla completa y comprueba el indicador en la aplicación de NVIDIA. La página no puede consultar si el controlador activó el efecto.'],
+        ['Loading subtitle…', 'Carregando legenda…', 'Cargando subtítulo…'],
+        ['Failed to download the subtitle.', 'Falha ao baixar a legenda.', 'No se pudo descargar el subtítulo.'],
+        ['The subtitle has no valid timings. Choose another release.', 'A legenda não contém tempos válidos. Escolha outra versão.', 'El subtítulo no contiene tiempos válidos. Elige otra versión.'],
+        ['Subtitle loaded: ', 'Legenda aberta: ', 'Subtítulo cargado: '],
+        ['. Adjust the delay above if needed.', '. Se necessário, ajuste o atraso acima.', '. Ajusta el retraso de arriba si es necesario.'],
+        ['Subtitle loaded: {label}. Adjust the delay if needed.', 'Legenda carregada: {label}. Ajuste o atraso se necessário.', 'Subtítulo cargado: {label}. Ajusta el retraso si es necesario.'],
+        ['Subtitle loaded: {label}. Adjust the delay above if needed.', 'Legenda aberta: {label}. Se necessário, ajuste o atraso acima.', 'Subtítulo cargado: {label}. Ajusta el retraso de arriba si es necesario.'],
+        [' Choose another subtitle from the list.', ' Escolha outra legenda na lista.', ' Elige otro subtítulo de la lista.'],
+        ['The subtitle must be no larger than 8 MB.', 'A legenda deve ter no máximo 8 MB.', 'El subtítulo no debe superar los 8 MB.'],
+        ['Select a valid SRT or WebVTT subtitle.', 'Selecione uma legenda SRT ou WebVTT válida.', 'Selecciona un subtítulo SRT o WebVTT válido.'],
+        ['File: ', 'Arquivo: ', 'Archivo: '],
+        ['File: {filename}', 'Arquivo: {filename}', 'Archivo: {filename}'],
+        ['Searching SubDL and OpenSubtitles…', 'Buscando no SubDL e no OpenSubtitles…', 'Buscando en SubDL y OpenSubtitles…'],
+        ['Select a subtitle to open', 'Selecione uma legenda para abrir', 'Selecciona un subtítulo para abrir'],
+        ['No subtitles available for this search', 'Nenhuma legenda disponível nesta busca', 'No hay subtítulos disponibles para esta búsqueda'],
+        [' subtitle(s) found. Choose a release in Search results and click Open selected subtitle.', ' legenda(s) encontrada(s). Escolha uma versão em Resultados da busca e clique em Abrir legenda selecionada.', ' subtítulo(s) encontrado(s). Elige una versión en Resultados de búsqueda y pulsa Abrir subtítulo seleccionado.'],
+        ['{count} subtitle(s) found. Select a release and choose Load selected.', '{count} legenda(s) encontrada(s). Selecione uma versão e clique em Carregar seleção.', '{count} subtítulo(s) encontrado(s). Selecciona una versión y pulsa Cargar selección.'],
+        ['{count} subtitle(s) found. Choose a release in Search results and click Open selected subtitle.', '{count} legenda(s) encontrada(s). Escolha uma versão em Resultados da busca e clique em Abrir legenda selecionada.', '{count} subtítulo(s) encontrado(s). Elige una versión en Resultados de búsqueda y pulsa Abrir subtítulo seleccionado.'],
+        ['No subtitles found. Check the title, language and episode, or try the IMDb ID.', 'Nenhuma legenda encontrada. Confira o título, idioma e episódio ou tente o ID IMDb.', 'No se encontraron subtítulos. Comprueba el título, el idioma y el episodio, o prueba con el ID de IMDb.'],
+        ['No subtitles found. Check title, language and episode; also try the IMDb ID.', 'Nenhuma legenda encontrada. Confira título, idioma e episódio; tente também o código IMDb.', 'No se encontraron subtítulos. Comprueba título, idioma y episodio; prueba también con el ID de IMDb.'],
+        [' — SubDL: ', ' — SubDL: ', ' — SubDL: '],
+        [' · OpenSubtitles: ', ' · OpenSubtitles: ', ' · OpenSubtitles: '],
+        ['configured', 'configurado', 'configurado'],
+        ['no key', 'sem chave', 'sin clave'],
+        ['account connected', 'conta conectada', 'cuenta conectada'],
+        ['Saving settings…', 'Salvando configurações…', 'Guardando configuración…'],
+        ['Settings saved. The services will verify the keys on your next search.', 'Configurações salvas. As chaves serão verificadas pelos serviços na próxima busca.', 'Configuración guardada. Los servicios comprobarán las claves en la próxima búsqueda.'],
+        ['Video opened in VLC.', 'Vídeo aberto no VLC.', 'Vídeo abierto en VLC.'],
+        ['Playback failed. Try H.264 compatibility mode or Open in VLC.', 'Falha ao reproduzir. Tente o modo Compatibilidade H.264 ou Abrir no VLC.', 'Error de reproducción. Prueba el modo Compatibilidad H.264 o Abrir en VLC.'],
+        ['Could not read the settings.', 'Não foi possível ler as configurações.', 'No se pudo leer la configuración.'],
+        ['Chrome’s floating window does not include this page’s subtitle layer. Use the player or fullscreen to see subtitles.', 'A janela flutuante do Chrome não inclui a camada de legendas desta página. Use o player ou a tela cheia para ver as legendas.', 'La ventana flotante de Chrome no incluye la capa de subtítulos de esta página. Usa el reproductor o la pantalla completa para verlos.'],
+        ['Picture-in-Picture is not supported in this tab.', 'Picture-in-Picture não suportado nesta aba.', 'Picture-in-Picture no es compatible con esta pestaña.'],
+        ['Protected storage requires Windows.', 'O armazenamento protegido requer Windows.', 'El almacenamiento protegido requiere Windows.'],
+        ['Could not protect or open the keys in this Windows account.', 'Nao foi possivel proteger ou abrir as chaves nesta conta do Windows.', 'No se pudieron proteger o abrir las claves en esta cuenta de Windows.'],
+        ['The provider returned an insecure address.', 'O provedor retornou um endereco inseguro.', 'El proveedor devolvió una dirección insegura.'],
+        ['The provider response exceeded the size limit.', 'Resposta do provedor excedeu o tamanho permitido.', 'La respuesta del proveedor superó el tamaño permitido.'],
+        ['Invalid key or session; check the settings.', 'Chave ou sessao invalida; confira as configuracoes.', 'Clave o sesión inválida; comprueba la configuración.'],
+        ['Access denied; check your key and account plan.', 'Acesso negado; confira a chave e o plano da conta.', 'Acceso denegado; comprueba la clave y el plan de la cuenta.'],
+        ['Download limit reached or session expired.', 'Limite de downloads atingido ou sessao expirada.', 'Límite de descargas alcanzado o sesión caducada.'],
+        ['Search limit reached; try again later.', 'Limite de consultas atingido; tente novamente mais tarde.', 'Límite de consultas alcanzado; inténtalo más tarde.'],
+        ['The service responded with HTTP {code}.', 'O servico respondeu com HTTP {code}.', 'El servicio respondió con HTTP {code}.'],
+        ['Could not connect to the service. Check your internet connection and try again.', 'Nao foi possivel conectar ao servico. Verifique a internet e tente novamente.', 'No se pudo conectar con el servicio. Comprueba la conexión a internet e inténtalo de nuevo.'],
+        ['The service returned an invalid response.', 'O servico retornou uma resposta invalida.', 'El servicio devolvió una respuesta inválida.'],
+        ['The archive contains no identifiable subtitle for this episode.', 'O pacote nao contem uma legenda identificavel para este episodio.', 'El paquete no contiene un subtítulo identificable para este episodio.'],
+        ['The archive contains multiple subtitles; choose an individual episode release.', 'O pacote contem varias legendas; escolha uma versao de episodio individual.', 'El paquete contiene varios subtítulos; elige una versión de un episodio individual.'],
+        ['The subtitle exceeded the size limit.', 'Legenda excedeu o tamanho permitido.', 'El subtítulo superó el tamaño permitido.'],
+        ['The file does not contain a valid SRT or WebVTT subtitle.', 'O arquivo nao contem uma legenda SRT ou WebVTT valida.', 'El archivo no contiene un subtítulo SRT o WebVTT válido.'],
+        ['Invalid search.', 'Pesquisa invalida.', 'Búsqueda inválida.'],
+        ['Enter a valid title, type and language.', 'Informe um titulo, tipo e idioma validos.', 'Introduce un título, tipo e idioma válidos.'],
+        ['Enter a valid season and episode.', 'Informe temporada e episodio validos.', 'Introduce una temporada y un episodio válidos.'],
+        ['Enter a valid year.', 'Informe um ano valido.', 'Introduce un año válido.'],
+        ['Invalid OpenSubtitles server.', 'Servidor OpenSubtitles invalido.', 'Servidor de OpenSubtitles inválido.'],
+        ['Invalid key.', 'Chave invalida.', 'Clave inválida.'],
+        ['To connect your account, enter your OpenSubtitles key, username and password.', 'Para conectar a conta, informe chave, usuario e senha do OpenSubtitles.', 'Para conectar la cuenta, introduce la clave, el usuario y la contraseña de OpenSubtitles.'],
+        ['OpenSubtitles did not return a session. Check your username and password.', 'O OpenSubtitles nao retornou uma sessao. Confira usuario e senha.', 'OpenSubtitles no devolvió una sesión. Comprueba el usuario y la contraseña.'],
+        ['Search rejected; check the key, limits and title.', 'Busca recusada; confira a chave, os limites e o titulo informado.', 'Búsqueda rechazada; comprueba la clave, los límites y el título.'],
+        ['Subtitle', 'Legenda', 'Subtítulo'],
+        ['{provider}: configure the API key in Subtitle settings.', '{provider}: configure a chave de API em Configuracoes de legendas.', '{provider}: configura la clave de API en Configuración de subtítulos.'],
+        ['Unexpected response from the service.', 'Resposta inesperada do servico.', 'Respuesta inesperada del servicio.'],
+        ['Result expired. Search for subtitles again.', 'Resultado expirado. Faca uma nova busca de legendas.', 'El resultado caducó. Vuelve a buscar subtítulos.'],
+        ['OpenSubtitles did not return a valid download link.', 'O OpenSubtitles nao retornou um link de download valido.', 'OpenSubtitles no devolvió un enlace de descarga válido.'],
+        ['Could not read the protected settings. Configure the keys again in the interface.', 'Nao foi possivel ler as configuracoes protegidas. Configure novamente as chaves na interface.', 'No se pudo leer la configuración protegida. Configura de nuevo las claves en la interfaz.'],
+        ['Local file unavailable. Use Open video from PC again.', 'Arquivo local indisponivel. Use Abrir video do PC novamente.', 'Archivo local no disponible. Usa Abrir vídeo del PC de nuevo.'],
+        ['Paste an HTTP/HTTPS link or use Open video from PC.', 'Cole um link HTTP/HTTPS ou use Abrir video do PC.', 'Pega un enlace HTTP/HTTPS o usa Abrir vídeo del PC.'],
+        ['Open video in StreamChromePro', 'Abrir video no StreamChromePro', 'Abrir vídeo en StreamChromePro'],
+        ['Videos', 'Videos', 'Vídeos'],
+        ['All files', 'Todos os arquivos', 'Todos los archivos'],
+        ['FFprobe not found. Install FFmpeg to play videos.', 'FFprobe nao encontrado. Instale o FFmpeg para reproduzir os videos.', 'No se encontró FFprobe. Instala FFmpeg para reproducir vídeos.'],
+        ['The video took too long to respond. Check the file or connection and try again.', 'O video demorou a responder. Confira o arquivo ou a conexao e tente novamente.', 'El vídeo tardó demasiado en responder. Comprueba el archivo o la conexión e inténtalo de nuevo.'],
+        ['Could not read the video. Check that the file or link is valid.', 'Nao foi possivel ler o video. Confira se o arquivo ou link e valido.', 'No se pudo leer el vídeo. Comprueba que el archivo o el enlace sean válidos.'],
+        ['The file does not contain a video track.', 'O arquivo nao contem uma faixa de video.', 'El archivo no contiene una pista de vídeo.'],
+        ['Invalid audio track.', 'Faixa de audio invalida.', 'Pista de audio inválida.'],
+        ['Could not locate the video position. Try again.', 'Nao foi possivel localizar o ponto do video. Tente novamente.', 'No se pudo localizar la posición del vídeo. Inténtalo de nuevo.'],
+        ['The file did not report the frame timestamp. Try another video position.', 'O arquivo nao informou o tempo do quadro. Tente outro ponto do video.', 'El archivo no indicó el tiempo del fotograma. Prueba otra posición del vídeo.'],
+        ['The file reported an invalid video timestamp.', 'O arquivo informou um tempo de video invalido.', 'El archivo indicó un tiempo de vídeo inválido.'],
+        ['Access is allowed only through the local application interface.', 'Acesso permitido apenas pela interface local do aplicativo.', 'Solo se permite el acceso desde la interfaz local de la aplicación.'],
+        ['Invalid local request.', 'Requisicao local invalida.', 'Solicitud local inválida.'],
+        ['Resource not found.', 'Recurso nao encontrado.', 'Recurso no encontrado.'],
+        ['Could not complete the operation. Check the file and try again.', 'Nao foi possivel concluir a operacao. Confira o arquivo e tente novamente.', 'No se pudo completar la operación. Comprueba el archivo e inténtalo de nuevo.'],
+        ['Send a valid JSON request.', 'Envie uma requisicao JSON valida.', 'Envía una solicitud JSON válida.'],
+        ['Invalid data.', 'Dados invalidos.', 'Datos inválidos.'],
+        ['Select a supported video file.', 'Selecione um arquivo de video compativel.', 'Selecciona un archivo de vídeo compatible.'],
+        ['Invalid playback position.', 'Posicao de reproducao invalida.', 'Posición de reproducción inválida.'],
+        ['VLC was not found on this computer.', 'VLC nao encontrado no computador.', 'No se encontró VLC en este equipo.'],
+        ['Could not complete the local operation. Try again.', 'Nao foi possivel concluir a operacao local. Tente novamente.', 'No se pudo completar la operación local. Inténtalo de nuevo.'],
+        ['assets/index.html was not found.', 'assets/index.html nao encontrado.', 'No se encontró assets/index.html.'],
+        ['FFmpeg not found. Install FFmpeg to play videos.', 'FFmpeg nao encontrado. Instale o FFmpeg para reproduzir os videos.', 'No se encontró FFmpeg. Instala FFmpeg para reproducir vídeos.'],
+        ['FFmpeg could not convert this video. Try opening it in VLC.', 'O FFmpeg nao conseguiu converter este video. Tente abrir no VLC.', 'FFmpeg no pudo convertir este vídeo. Intenta abrirlo en VLC.'],
+        ['Port {port} is in use. Close the previous version and try again.', 'A porta {port} esta ocupada. Feche a versao anterior e tente novamente.', 'El puerto {port} está en uso. Cierra la versión anterior e inténtalo de nuevo.'],
+        ['Local videos, SubDL and OpenSubtitles. Close this window to exit.', 'Videos locais, SubDL e OpenSubtitles. Feche esta janela para encerrar.', 'Vídeos locales, SubDL y OpenSubtitles. Cierra esta ventana para salir.']
+    ];
+    const exact = new Map();
+    const templates = [];
+    const placeholder = /\{([A-Za-z][A-Za-z0-9_]*)\}/g;
+    const escape = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    for (const row of entries) {
+        for (const phrase of row) if (!exact.has(phrase)) exact.set(phrase, row);
+        for (const phrase of new Set(row)) {
+            const matches = Array.from(phrase.matchAll(placeholder));
+            if (!matches.length) continue;
+            // Split on literal anchors rather than backtracking through multiple wildcards.
+            const chunks = [];
+            let end = 0;
+            for (const match of matches) {
+                chunks.push(phrase.slice(end, match.index));
+                end = match.index + match[0].length;
+            }
+            chunks.push(phrase.slice(end));
+            templates.push({row, chunks, names: matches.map(match => match[1]), prefix: new RegExp('^' + escape(chunks[0]))});
+        }
+    }
+    function translate(text, language = 'en') {
+        if (typeof text !== 'string') return text;
+        const index = language === 'pt' ? 1 : language === 'es' ? 2 : 0;
+        const row = exact.get(text);
+        if (row) return row[index];
+        for (const template of templates) {
+            const {chunks, names} = template;
+            if (!template.prefix.test(text) || !text.endsWith(chunks[chunks.length - 1])) continue;
+            let position = chunks[0].length;
+            const values = Object.create(null);
+            let valid = true;
+            for (let i = 0; i < names.length; i++) {
+                const anchor = chunks[i + 1];
+                const next = i === names.length - 1 ? text.length - anchor.length : text.indexOf(anchor, position);
+                if (next < position || !text.startsWith(anchor, next)) { valid = false; break; }
+                const value = text.slice(position, next);
+                if (Object.hasOwn(values, names[i]) && values[names[i]] !== value) { valid = false; break; }
+                values[names[i]] = value;
+                position = next + anchor.length;
+            }
+            if (valid && position === text.length) return template.row[index].replace(placeholder, (_, name) => values[name]);
+        }
+        return text;
+    }
+    return {entries, translate, toEnglish: text => translate(text, 'en')};
+}));
+
