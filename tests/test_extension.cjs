@@ -1,0 +1,7 @@
+const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');
+function harness(){const nodes={open:{setAttribute(){},addEventListener(_,fn){this.click=fn;}},buttonLabel:{},status:{}};let calls=0,reply,timer,closed=false;const context={document:{getElementById:id=>nodes[id]},setTimeout:fn=>{timer=fn;return 1;},clearTimeout(){},window:{close(){closed=true;}},chrome:{runtime:{sendNativeMessage(host,message,callback){assert.equal(host,'com.caiquecato.streamchromepro');calls++;reply=callback;}},tabs:{create(data,callback){assert.equal(data.url,'http://127.0.0.1:8780/');callback();}}}};vm.runInNewContext(fs.readFileSync('extension/chromium/popup.js','utf8'),context);return {nodes,context,get calls(){return calls;},reply:value=>reply(value),timeout:()=>timer(),get closed(){return closed;}};}
+let h=harness();h.nodes.open.click();h.nodes.open.click();assert.equal(h.calls,1);assert.equal(h.nodes.buttonLabel.textContent,'Opening player');h.reply({ok:true});assert.equal(h.closed,true);
+h=harness();h.nodes.open.click();h.context.chrome.runtime.lastError={message:'missing host'};h.reply();assert.equal(h.nodes.open.disabled,false);assert.equal(h.nodes.status.hidden,false);
+h=harness();h.nodes.open.click();h.timeout();assert.equal(h.nodes.open.disabled,false);assert.equal(h.nodes.buttonLabel.textContent,'Try again');
+assert.ok(!fs.readFileSync('extension/chromium/popup.js','utf8').includes('\ufffd'));
+console.log('Popup loading, duplicate clicks, host failure, timeout and encoding verified.');

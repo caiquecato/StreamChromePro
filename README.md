@@ -13,9 +13,11 @@ A Windows companion app and browser launcher for playing local videos in your br
 
 ## Browser extension
 
+![Browser launcher](docs/figures/extension-popup.jpg)
+
 The extension opens the installed StreamChrome PRO application from the browser toolbar.
 
-**Chrome / Chromium:** extract `StreamChromePro-Chromium-2.4.2.zip`. Open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select the extracted folder. Click the extension icon, then **Open player**.
+**Chrome / Chromium:** extract `StreamChromePro-Chromium-2.4.3.zip`. Open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select the extracted folder. Click the extension icon, then **Open player**.
 
 **Firefox:** the Firefox package is provided for temporary developer testing through `about:debugging` → This Firefox → Load Temporary Add-on. Permanent installation requires Mozilla signing; this release is not signed or listed in an add-on store.
 
