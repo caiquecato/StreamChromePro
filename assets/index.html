@@ -372,8 +372,11 @@
         seekBarContainer.setAttribute('aria-valuenow', String(Math.round(position)));
         seekBarContainer.setAttribute('aria-valuetext', formatTime(position));
         renderSubtitles();
-        seekBarFill.style.width = (movieTotalDuration > 0 ? Math.min(100, position / movieTotalDuration * 100) : 0) + '%';
+        const progress = (movieTotalDuration > 0 ? Math.max(0, Math.min(100, position / movieTotalDuration * 100)) : 0) + '%';
+        seekBarFill.style.width = progress;
+        seekBarContainer.style.setProperty('--progress', progress);
     }
+    function getPlaybackPosition() { return baseSeekSeconds + (video.currentTime || 0); }
     function onAudioChange() {
         if (currentLoadedUrl) startPlayback(baseSeekSeconds + (video.currentTime || 0));
     }
@@ -556,7 +559,7 @@
     video.addEventListener('play', () => { updatePlayIcon(true); resetOverlayTimer(); startSubtitleFrames(); });
     video.addEventListener('playing', () => notice('playerStatus', ''));
     video.addEventListener('pause', () => { updatePlayIcon(false); resetOverlayTimer(); stopSubtitleFrames(); renderSubtitles(); });
-    video.addEventListener('ended', () => { updatePlayIcon(false); stopSubtitleFrames(); renderSubtitles(); });
+    video.addEventListener('ended', () => { resetOverlayTimer(); updatePlayIcon(false); stopSubtitleFrames(); renderSubtitles(); });
     video.addEventListener('error', () => {
         if (video.getAttribute('src')) notice('playerStatus', 'Playback failed. Try H.264 compatibility mode or Open in VLC.', true);
     });
@@ -607,15 +610,20 @@
     // Oculta automaticamente a barra após 3 segundos
     function resetOverlayTimer() {
         controlsOverlay.classList.remove('hidden');
+        playerWrapper.dataset.cursorHidden = 'false';
         clearTimeout(overlayTimer);
         if (!video.paused) {
             overlayTimer = setTimeout(() => {
-                controlsOverlay.classList.add('hidden');
+                if (!video.paused && !video.ended) {
+                    controlsOverlay.classList.add('hidden');
+                    playerWrapper.dataset.cursorHidden = 'true';
+                }
             }, 3000);
         }
     }
 
     playerWrapper.addEventListener('mousemove', resetOverlayTimer);
+    playerWrapper.addEventListener('pointerdown', resetOverlayTimer);
     playerWrapper.addEventListener('mouseleave', () => {
         if (!video.paused) controlsOverlay.classList.add('hidden');
     });

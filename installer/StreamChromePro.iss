@@ -1,4 +1,4 @@
-#define AppVersion "2.4.1"
+#define AppVersion "2.4.2"
 [Setup]
 AppId={{2F24CE85-F936-407A-98C3-E05B2F34B651}
 AppName=StreamChrome PRO
@@ -9,7 +9,7 @@ DefaultDirName={localappdata}\Programs\StreamChromePro
 DefaultGroupName=StreamChrome PRO
 PrivilegesRequired=lowest
 OutputDir=..\dist
-OutputBaseFilename=StreamChromePro-Setup-2.4.1
+OutputBaseFilename=StreamChromePro-Setup-2.4.2
 SetupIconFile=..\assets\app.ico
 UninstallDisplayIcon={app}\StreamChromePro.exe
 Compression=lzma2

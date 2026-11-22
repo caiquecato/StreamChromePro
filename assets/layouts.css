@@ -320,3 +320,5 @@ html[data-layout='glass'] .playback-information[open]{top:76px}
 html[data-layout] .exit-player{display:inline-flex!important;order:100;align-items:center;justify-content:center;min-height:30px;padding:5px 10px;border:1px solid var(--border);border-radius:5px;color:var(--text-main);background:var(--bg-surface);font-size:12px;flex-shrink:0}
 html[data-layout] .exit-player:hover{background:var(--bg-card)}
 html[data-layout] .exit-player span{display:inline!important}
+
+html[data-layout] .player-wrapper[data-cursor-hidden='true'],html[data-layout] .player-wrapper[data-cursor-hidden='true'] *{cursor:none!important}

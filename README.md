@@ -6,7 +6,7 @@ A Windows companion app and browser launcher for playing local videos in your br
 
 ## Install and open
 
-1. Download **StreamChromePro-Setup-2.4.1.exe** from Releases and run it. The application installs for your Windows account without an administrator prompt.
+1. Download **StreamChromePro-Setup-2.4.2.exe** from Releases and run it. The application installs for your Windows account without an administrator prompt.
 2. FFmpeg, FFprobe and Python are included. No separate installation or PATH configuration is needed.
 3. Open **StreamChrome PRO** from the Start menu. Choose **Open file**, then select your video. Files stay on your computer.
 4. Use **Exit** at the far right to stop the application. Closing the browser tab leaves the local server running. You can also right-click its tray icon and choose **Exit / Sair**.
@@ -15,7 +15,7 @@ A Windows companion app and browser launcher for playing local videos in your br
 
 The extension opens the installed StreamChrome PRO application from the browser toolbar.
 
-**Chrome / Chromium:** extract `StreamChromePro-Chromium-2.4.1.zip`. Open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select the extracted folder. Click the extension icon, then **Open player**.
+**Chrome / Chromium:** extract `StreamChromePro-Chromium-2.4.2.zip`. Open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select the extracted folder. Click the extension icon, then **Open player**.
 
 **Firefox:** the Firefox package is provided for temporary developer testing through `about:debugging` → This Firefox → Load Temporary Add-on. Permanent installation requires Mozilla signing; this release is not signed or listed in an add-on store.
 

@@ -223,7 +223,7 @@ class StreamProHandler(BaseHTTPRequestHandler):
             elif parsed.path == '/api/settings':
                 self.send_json(SUBTITLES.status())
             elif parsed.path == '/api/status':
-                self.send_json({'version': '2.4.1', 'ffmpeg': bool(shutil.which(FFMPEG_BIN)), 'ffprobe': bool(shutil.which(FFPROBE_BIN))})
+                self.send_json({'version': '2.4.2', 'ffmpeg': bool(shutil.which(FFMPEG_BIN)), 'ffprobe': bool(shutil.which(FFPROBE_BIN))})
             elif parsed.path == '/api/inspect':
                 raw = query.get('url', [''])[0]
                 source = resolve_target_url(raw)
