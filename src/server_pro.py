@@ -17,6 +17,7 @@ import webbrowser
 import urllib.request
 
 from process_guard import attach_to_server
+from downloads import DownloadService
 from subtitles import SubtitleService, ProviderError, load_settings, http_json, http_bytes, to_vtt, guess_search
 
 class HTTPServer(ThreadingHTTPServer):
@@ -33,6 +34,7 @@ def find_media_tool(name):
 
 FFMPEG_BIN = find_media_tool('ffmpeg')
 FFPROBE_BIN = find_media_tool('ffprobe')
+DOWNLOADS = DownloadService(APP_DIRECTORY / 'yt-dlp' / 'yt-dlp.exe' if getattr(sys, 'frozen', False) else APP_DIRECTORY / 'installer' / 'yt-dlp' / 'yt-dlp.exe', FFMPEG_BIN)
 NO_WINDOW = subprocess.CREATE_NO_WINDOW if sys.platform == 'win32' else 0
 VIDEO_EXTENSIONS = {'.mp4', '.mkv', '.avi', '.mov', '.m4v', '.webm', '.ts', '.m2ts', '.mpg', '.mpeg', '.wmv'}
 LOCAL_FILES = OrderedDict()
@@ -218,12 +220,14 @@ class StreamProHandler(BaseHTTPRequestHandler):
         try:
             if parsed.path in ('/', '/index.html'):
                 self.serve_asset()
-            elif parsed.path in ('/player_helpers.js', '/player.css', '/layouts.css', '/appearance.js', '/i18n.js','/presentation.js'):
+            elif parsed.path in ('/player_helpers.js', '/player.css', '/layouts.css', '/appearance.js', '/i18n.js','/presentation.js','/downloads.js'):
                 self.serve_asset(parsed.path[1:])
+            elif parsed.path == '/api/download/status':
+                self.send_json(DOWNLOADS.status(query.get('id',[''])[0]))
             elif parsed.path == '/api/settings':
                 self.send_json(SUBTITLES.status())
             elif parsed.path == '/api/status':
-                self.send_json({'version': '2.4.2', 'ffmpeg': bool(shutil.which(FFMPEG_BIN)), 'ffprobe': bool(shutil.which(FFPROBE_BIN))})
+                self.send_json({'version': '2.5.0', 'ffmpeg': bool(shutil.which(FFMPEG_BIN)), 'ffprobe': bool(shutil.which(FFPROBE_BIN))})
             elif parsed.path == '/api/inspect':
                 raw = query.get('url', [''])[0]
                 source = resolve_target_url(raw)
@@ -261,7 +265,31 @@ class StreamProHandler(BaseHTTPRequestHandler):
             if not isinstance(data, dict):
                 raise ValueError('Invalid data.')
             path = urlparse(self.path).path
-            if path == '/api/shutdown':
+            if path == '/api/download/analyze':
+                self.send_json(DOWNLOADS.analyze(data.get('url')))
+            elif path == '/api/download/folder':
+                import tkinter
+                from tkinter import filedialog
+                with DIALOG_LOCK:
+                    root = tkinter.Tk(); root.withdraw(); root.attributes('-topmost', True)
+                    try:
+                        selected = filedialog.askdirectory(parent=root, title='Choose download folder')
+                    finally:
+                        root.destroy()
+                if selected:
+                    DOWNLOADS.destination = Path(selected)
+                self.send_json({'folder':str(DOWNLOADS.destination)})
+            elif path == '/api/download/start':
+                self.send_json(DOWNLOADS.start(data.get('id'), data.get('quality','best')))
+            elif path == '/api/download/cancel':
+                self.send_json(DOWNLOADS.cancel(data.get('id')))
+            elif path == '/api/download/open':
+                downloaded = DOWNLOADS.completed_file(data.get('id'))
+                token = secrets.token_urlsafe(24)
+                with LOCAL_LOCK:
+                    LOCAL_FILES[token] = str(downloaded)
+                self.send_json({'source':'local:' + token,'filename':downloaded.name})
+            elif path == '/api/shutdown':
                 self.send_json({'status': 'stopping'})
                 threading.Thread(target=self.server.shutdown, daemon=True).start()
             elif path == '/api/local/open':

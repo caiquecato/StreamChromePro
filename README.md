@@ -6,7 +6,7 @@ A Windows companion app and browser launcher for playing local videos in your br
 
 ## Install and open
 
-1. Download **StreamChromePro-Setup-2.4.2.exe** from Releases and run it. The application installs for your Windows account without an administrator prompt.
+1. Download **StreamChromePro-Setup-2.5.0.exe** from Releases and run it. The application installs for your Windows account without an administrator prompt.
 2. FFmpeg, FFprobe and Python are included. No separate installation or PATH configuration is needed.
 3. Open **StreamChrome PRO** from the Start menu. Choose **Open file**, then select your video. Files stay on your computer.
 4. Use **Exit** at the far right to stop the application. Closing the browser tab leaves the local server running. You can also right-click its tray icon and choose **Exit / Sair**.
@@ -24,6 +24,12 @@ The extension opens the installed StreamChrome PRO application from the browser 
 **Opera:** experimental. Chrome is the primary supported browser for this beta.
 
 The Windows installer registers the native launcher for Chrome, Edge and Firefox. Install the browser extension separately using the steps above.
+
+## Download a video
+
+Paste a link in **Open URL** and click **Play link**. Playback starts while download options are prepared. Expand **Download video**, select a quality and click **Download video**. Progress and cancellation stay in the Media panel. When the download finishes, click **Open in player**.
+
+Files are saved under `Downloads\StreamChromePro` by default. Use **Save folder** to choose another location. The app accepts individual videos; playlist and live-stream downloads are not included. Downloads depend on site availability and access requirements. Browser cookies are not imported automatically.
 
 ## Subtitles
 
@@ -85,6 +91,8 @@ Use Python 3 and Node.js for tests. Install Python build dependencies with `pip 
 The project runs only on loopback. The native bridge accepts the single `open` action and launches only the adjacent player executable. 
 
 ## Credits and support
+
+Video downloading is powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp), maintained by the yt-dlp contributors. Its license and bundled third-party notices are included in the Windows installation.
 
 Created by **OhCato**. [Support development](https://buymeacoffee.com/caique1704u).
 

@@ -11,3 +11,11 @@ FFmpeg and FFprobe are installed in the application's `ffmpeg` folder. The execu
 - Build dependencies and upstream sources: https://www.gyan.dev/ffmpeg/builds/#libraries
 
 FFmpeg is run as a separate executable. Its license does not replace the licenses of Python, Pillow or pystray.
+
+## yt-dlp
+
+Video downloading uses the official [yt-dlp](https://github.com/yt-dlp/yt-dlp) executable, version 2026.10.26. yt-dlp is maintained by its contributors and licensed under the Unlicense. Its bundled components carry their own licenses. `LICENSE` and `THIRD_PARTY_LICENSES.txt` are installed in the application's `yt-dlp` folder. The source archive is provided in the release downloads.
+
+## Deno
+
+[Deno](https://github.com/denoland/deno) provides the JavaScript runtime used by supported video extractors. Its MIT license is installed as `yt-dlp/DENO-LICENSE.md`.

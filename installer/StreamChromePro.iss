@@ -1,4 +1,4 @@
-#define AppVersion "2.4.2"
+#define AppVersion "2.5.0"
 [Setup]
 AppId={{2F24CE85-F936-407A-98C3-E05B2F34B651}
 AppName=StreamChrome PRO
@@ -9,7 +9,7 @@ DefaultDirName={localappdata}\Programs\StreamChromePro
 DefaultGroupName=StreamChrome PRO
 PrivilegesRequired=lowest
 OutputDir=..\dist
-OutputBaseFilename=StreamChromePro-Setup-2.4.2
+OutputBaseFilename=StreamChromePro-Setup-2.5.0
 SetupIconFile=..\assets\app.ico
 UninstallDisplayIcon={app}\StreamChromePro.exe
 Compression=lzma2
@@ -25,6 +25,7 @@ Source: "..\extension\*"; DestDir: "{app}\extension"; Flags: ignoreversion recur
 Source: "..\README.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "ffmpeg\*"; DestDir: "{app}\ffmpeg"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\docs\THIRD_PARTY.md"; DestDir: "{app}"; Flags: ignoreversion
+Source: "yt-dlp\*"; DestDir: "{app}\yt-dlp"; Flags: ignoreversion
 [Icons]
 Name: "{group}\StreamChrome PRO"; Filename: "{app}\StreamChromePro.exe"
 Name: "{autodesktop}\StreamChrome PRO"; Filename: "{app}\StreamChromePro.exe"; Tasks: desktopicon
