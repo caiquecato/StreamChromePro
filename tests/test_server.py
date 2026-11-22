@@ -46,6 +46,15 @@ class ServerTests(unittest.TestCase):
             self.assertNotIn(directory.encode(), body)
             self.assertEqual(server.resolve_target_url(data['source']), str(video.resolve()))
 
+    def test_split_remote_stream_maps_external_audio_and_seeks_both_inputs(self):
+        metadata={'video_codec':'av1','audio_tracks':[{'index':0}],'audio_url':'https://example.org/audio','headers':'User-Agent: Test\r\n','audio_headers':'User-Agent: Test\r\n'}
+        command=server.build_stream_command('https://example.org/video',metadata,12)
+        self.assertEqual(command.count('-i'),2)
+        self.assertEqual(command.count('-ss'),2)
+        self.assertEqual(command.count('-noaccurate_seek'),2)
+        self.assertIn('1:a:0',command)
+        self.assertIn('copy',command)
+
     def test_unregistered_local_paths_are_rejected(self):
         with self.assertRaises(ValueError):
             server.resolve_target_url('file:///C:/private.mkv')

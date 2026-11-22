@@ -15,7 +15,7 @@ html[data-layout] .appearance-popover{z-index:60}
 .workspace{display:grid;grid-template-columns:minmax(0,1fr);position:relative;gap:0;padding:0}
 html[data-layout] .watch-column{gap:0;position:relative;min-width:0}
 html[data-layout] #mediaTitleBar{display:none!important}
-html[data-layout] #playerStatus:not(:empty){position:absolute;top:12px;left:16px;right:16px;z-index:7;max-width:760px;padding:8px 12px;border-radius:5px;background:var(--bg-surface)}
+html[data-layout] #playerStatus:not(:empty){position:static;padding:8px 0;color:var(--text-muted)}
 html[data-layout] .player-wrapper{display:grid;grid-template-rows:minmax(0,1fr) 64px;height:calc(100dvh - 52px);min-height:320px;aspect-ratio:auto;border-radius:0}
 html[data-layout] .player-wrapper video{grid-row:1;width:100%;height:100%;min-height:0;object-fit:contain;aspect-ratio:auto}
 html[data-layout] .controls-overlay{position:relative;grid-row:2;inset:auto;display:flex;padding:10px 20px 8px;gap:8px;background:var(--bg-surface);color:var(--text-main);border-top:1px solid var(--border);opacity:1;transform:none}

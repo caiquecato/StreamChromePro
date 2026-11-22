@@ -16,6 +16,15 @@ class DownloadTests(unittest.TestCase):
   self.assertNotIn('url',job);self.assertNotIn('process',job)
   with self.assertRaises(ValueError):service.start(job['id'],'1080;command')
   with self.assertRaises(ValueError):service.completed_file(job['id'])
+ def test_playback_keeps_split_streams_and_headers_private(self):
+  service=DownloadService('tool','ffmpeg')
+  info={'title':'Video','requested_formats':[{'vcodec':'av01','acodec':'none','url':'https://example.org/video','http_headers':{'User-Agent':'Browser','Referer':'https://example.org/','Bad':'hidden'}},{'vcodec':'none','acodec':'opus','url':'https://example.org/audio'}]}
+  fake=type('Result',(),{'returncode':0,'stdout':json.dumps(info)})()
+  with patch('downloads.subprocess.run',return_value=fake):job=service.analyze('https://example.org/watch')
+  source,options=service.playback(job['id'])
+  self.assertEqual(source,'https://example.org/video');self.assertEqual(options['audio_url'],'https://example.org/audio')
+  self.assertIn('User-Agent: Browser',options['headers']);self.assertNotIn('Bad',options['headers'])
+  self.assertNotIn('audio_url',job);self.assertNotIn('headers',job)
  def test_playlist_is_not_silently_downloaded(self):
   service=DownloadService('tool','ffmpeg');fake=type('Result',(),{'returncode':0,'stdout':'{"_type":"playlist","entries":[]}'})()
   with patch('downloads.subprocess.run',return_value=fake):

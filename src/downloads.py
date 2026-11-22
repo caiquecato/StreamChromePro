@@ -24,7 +24,7 @@ class DownloadService:
     def analyze(self,url):
         url=validate_link(url)
         try:
-            result=subprocess.run(self.command()+['--skip-download','--dump-single-json','--',url],capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=75,creationflags=NO_WINDOW)
+            result=subprocess.run(self.command()+['--check-formats','--skip-download','--dump-single-json','--',url],capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=75,creationflags=NO_WINDOW)
         except FileNotFoundError:raise ValueError('The downloader is unavailable. Update the desktop app.') from None
         except subprocess.TimeoutExpired:raise ValueError('Link analysis timed out. Try again.') from None
         if result.returncode:raise ValueError('Could not analyze this link. It may be unavailable, require sign-in, or be unsupported.')
@@ -42,13 +42,28 @@ class DownloadService:
                 if old is None:raise ValueError('Finish or cancel the current download first.')
                 self.jobs.pop(old)
             token=secrets.token_urlsafe(24)
-            self.jobs[token]={'id':token,'url':url,'title':str(info.get('title') or 'Video')[:300],'duration':info.get('duration'),'heights':heights,'state':'ready','downloaded':0,'total':0,'speed':0,'eta':None,'path':None,'process':None,'cancel':False,'error':''}
+            self.jobs[token]={'id':token,'url':url,'title':str(info.get('title') or 'Video')[:300],'duration':info.get('duration'),'heights':heights,'state':'ready','downloaded':0,'total':0,'speed':0,'eta':None,'path':None,'process':None,'cancel':False,'error':'','info':info}
             return self.status(token)
     def status(self,token):
         with self.lock:
             job=self.jobs.get(token)
             if job is None:raise ValueError('Download expired. Analyze the link again.')
-            return {key:job[key] for key in ('id','title','duration','heights','state','downloaded','total','speed','eta','error')}
+            return {**{key:job[key] for key in ('id','title','duration','heights','state','downloaded','total','speed','eta','error')},'source':'remote:'+token}
+    def playback(self,token):
+        with self.lock:
+            job=self.jobs.get(token)
+            if not job:raise ValueError('Video link expired. Press Play link again.')
+            info=job.get('info',{})
+            formats=info.get('requested_formats') or [info]
+            video=next((f for f in formats if f.get('vcodec') not in (None,'none') and f.get('url')),None)
+            if not video:raise ValueError('This link does not provide a playable video stream.')
+            audio=next((f for f in formats if f.get('acodec') not in (None,'none') and f.get('url')),None)
+            def headers(item):
+                values={**info.get('http_headers',{}),**item.get('http_headers',{})}
+                return ''.join(f'{key}: {value}\r\n' for key,value in values.items() if key.lower() in ('user-agent','referer','origin') and '\r' not in str(value) and '\n' not in str(value))
+            source=validate_link(video['url'])
+            extra=audio if audio and audio['url']!=video['url'] else None
+            return source,{'headers':headers(video),'audio_url':validate_link(extra['url']) if extra else None,'audio_headers':headers(extra) if extra else '', 'title':job['title']}
     def start(self,token,quality):
         with self.lock:
             job=self.jobs.get(token)

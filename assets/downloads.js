@@ -1,6 +1,6 @@
 (function(){
  'use strict';
- const $=id=>document.getElementById(id);let current=null,timer=null,analyzing=false,analysisGeneration=0,analyzedUrl='';
+ const $=id=>document.getElementById(id);let current=null,timer=null,analyzing=false,analysisGeneration=0,analyzedUrl='',prepared=null;
  const message=text=>AppUI.text($('downloadStatus'),text);
  function stopPolling(){clearTimeout(timer);timer=null;}
  function render(job){
@@ -25,17 +25,25 @@
   try{const job=await api('/api/download/status?id='+encodeURIComponent(current.id));render(job);if(['downloading','processing'].includes(job.state))timer=setTimeout(poll,1000);}
   catch(error){message(error.message);timer=setTimeout(poll,3000);}
  }
- window.prepareLinkDownload=async function(url){
-  if(url===analyzedUrl && (analyzing || current?.state==='ready'))return;
-  if(current&&['downloading','processing'].includes(current.state))return;
-  analyzedUrl=url;
-  const generation=++analysisGeneration;analyzing=true;stopPolling();current=null;$('downloadDetails').hidden=true;message('Analyzing link...');
-  try{
-   const job=await api('/api/download/analyze',{url});if(generation!==analysisGeneration)return;
-   const options=[AppUI.option('Best available','best'),...job.heights.map(height=>new Option(height+'p',String(height)))];
-   $('downloadQuality').replaceChildren(...options);render(job);message('Choose a quality and download.');
-  }catch(error){message(error.message);}
-  finally{if(generation===analysisGeneration)analyzing=false;}
+ window.prepareLinkDownload=function(url){
+  if(url===analyzedUrl&&prepared)return prepared;
+  analyzedUrl=url;const generation=++analysisGeneration;
+  const keepActive=current&&['downloading','processing'].includes(current.state);
+  analyzing=true;
+  if(!keepActive){stopPolling();current=null;$('downloadDetails').hidden=true;message('Analyzing link...');}
+  prepared=(async()=>{
+   try{
+    const job=await api('/api/download/analyze',{url});
+    if(generation!==analysisGeneration)return null;
+    if(!keepActive){
+     $('downloadQuality').replaceChildren(AppUI.option('Best available','best'),...job.heights.map(height=>new Option(height+'p',String(height))));
+     render(job);message('Choose a quality and download.');
+    }
+    return job;
+   }catch(error){if(generation===analysisGeneration&&!keepActive)message(error.message);return null;}
+   finally{if(generation===analysisGeneration)analyzing=false;}
+  })();
+  return prepared;
  };
  $('startDownload').addEventListener('click',async()=>{
   if(!current||current.state!=='ready')return;
@@ -62,7 +70,7 @@
  try{const previous=localStorage.getItem('streamchrome.download.id');if(previous){current={id:previous};api('/api/download/status?id='+encodeURIComponent(previous)).then(job=>{if(analysisGeneration!==0)return;render(job);if(['downloading','processing'].includes(job.state))timer=setTimeout(poll,1000);}).catch(()=>{try{localStorage.removeItem('streamchrome.download.id');}catch{}});}}catch{}
  $('inputUrl').addEventListener('input',()=>{
   if(current&&['downloading','processing'].includes(current.state))return;
-  analysisGeneration++;analyzing=false;analyzedUrl='';current=null;stopPolling();$('downloadDetails').hidden=true;message('');
+  analysisGeneration++;analyzing=false;analyzedUrl='';prepared=null;current=null;stopPolling();$('downloadDetails').hidden=true;message('');
   try{localStorage.removeItem('streamchrome.download.id');}catch{}
  });
  window.addEventListener('pagehide',stopPolling);

@@ -78,6 +78,15 @@ def resolve_target_url(raw):
         if not path or not os.path.isfile(path):
             raise ValueError('Local file unavailable. Use Open video from PC again.')
         return path
+    if value.startswith('remote:'):
+        source, options = DOWNLOADS.playback(value[7:])
+        metadata = probe_media(source, options.get('headers', ''))
+        metadata = {**metadata, **options}
+        if options.get('audio_url'):
+            metadata['audio_tracks'] = [{'index': 0, 'label': 'Default track'}]
+        with LOCAL_LOCK:
+            PROBE_CACHE[source] = metadata
+        return source
     parsed = urlparse(value)
     if parsed.scheme not in ('http', 'https') or not parsed.hostname or parsed.username or parsed.password:
         raise ValueError('Paste an HTTP/HTTPS link or use Open video from PC.')
@@ -101,12 +110,12 @@ def choose_local_video():
             root.destroy()
 
 
-def probe_media(source):
+def probe_media(source, headers=''):
     with LOCAL_LOCK:
         if source in PROBE_CACHE:
             return PROBE_CACHE[source]
     try:
-        result = subprocess.run([FFPROBE_BIN, '-v', 'error', '-show_entries', 'format=duration:stream=index,codec_name,codec_type,width,height:stream_tags=language,title', '-of', 'json', source], stdin=subprocess.DEVNULL, capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=25, creationflags=NO_WINDOW)
+        result = subprocess.run([FFPROBE_BIN, '-v', 'error', '-show_entries', 'format=duration:stream=index,codec_name,codec_type,width,height:stream_tags=language,title', '-of', 'json'] + (['-headers', headers] if headers else []) + [source], stdin=subprocess.DEVNULL, capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=25, creationflags=NO_WINDOW)
     except FileNotFoundError:
         raise ValueError('FFprobe not found. Install FFmpeg to play videos.') from None
     except subprocess.TimeoutExpired:
@@ -160,16 +169,24 @@ def convert_srt_to_vtt(content):
 
 
 def build_stream_command(source, metadata, seek, audio='', compatibility=False):
-    cmd = [FFMPEG_BIN, '-nostdin', '-hide_banner', '-loglevel', 'error', '-ss', str(seek), '-i', source, '-map', '0:v:0']
+    cmd = [FFMPEG_BIN, '-nostdin', '-hide_banner', '-loglevel', 'error', '-ss', str(seek)]
+    if metadata.get('headers'): cmd += ['-headers', metadata['headers']]
+    cmd += ['-i', source]
+    if metadata.get('audio_url'):
+        cmd += ['-ss', str(seek)]
+        if metadata.get('audio_headers'): cmd += ['-headers', metadata['audio_headers']]
+        cmd += ['-i', metadata['audio_url']]
+    cmd += ['-map', '0:v:0']
     if audio:
         if not audio.isdigit() or int(audio) not in [item['index'] for item in metadata['audio_tracks']]:
             raise ValueError('Invalid audio track.')
-        cmd += ['-map', '0:' + audio]
+        cmd += ['-map', '1:a:0' if metadata.get('audio_url') else '0:' + audio]
     else:
-        cmd += ['-map', '0:a:0?']
+        cmd += ['-map', '1:a:0' if metadata.get('audio_url') else '0:a:0?']
     if metadata['video_codec'] in ('h264', 'hevc', 'av1') and not compatibility:
         # Preserve the same pre-roll for audio and copied video after input seeking.
-        cmd.insert(cmd.index('-ss'), '-noaccurate_seek')
+        for index in reversed([i for i, value in enumerate(cmd) if value == '-ss']):
+            cmd.insert(index, '-noaccurate_seek')
         cmd += ['-c:v', 'copy']
         if metadata['video_codec'] == 'hevc':
             cmd += ['-tag:v', 'hvc1']
@@ -182,7 +199,7 @@ def build_stream_command(source, metadata, seek, audio='', compatibility=False):
 def seek_start(source, requested):
     if requested <= 0:
         return 0.0
-    result = subprocess.run([FFPROBE_BIN, '-v', 'error', '-select_streams', 'v:0', '-read_intervals', f'{requested}%+#1', '-show_packets', '-show_entries', 'packet=pts_time', '-of', 'json', source], stdin=subprocess.DEVNULL, capture_output=True, text=True, encoding='utf-8', timeout=15, creationflags=NO_WINDOW)
+    result = subprocess.run([FFPROBE_BIN, '-v', 'error', '-select_streams', 'v:0', '-read_intervals', f'{requested}%+#1', '-show_packets', '-show_entries', 'packet=pts_time', '-of', 'json'] + (['-headers', PROBE_CACHE.get(source, {}).get('headers')] if PROBE_CACHE.get(source, {}).get('headers') else []) + [source], stdin=subprocess.DEVNULL, capture_output=True, text=True, encoding='utf-8', timeout=15, creationflags=NO_WINDOW)
     if result.returncode:
         raise ValueError('Could not locate the video position. Try again.')
     packets = json.loads(result.stdout).get('packets', [])
@@ -232,11 +249,13 @@ class StreamProHandler(BaseHTTPRequestHandler):
                 raw = query.get('url', [''])[0]
                 source = resolve_target_url(raw)
                 metadata = probe_media(source)
-                if raw.startswith('local:'):
+                if raw.startswith('remote:'):
+                    filename = metadata.get('title', 'Video')
+                elif raw.startswith('local:'):
                     filename = Path(source).name
                 else:
                     filename = parse_qs(urlparse(raw).query).get('torrent_name', [unquote(Path(urlparse(raw).path).name) or 'Video por link'])[0]
-                self.send_json({**metadata, 'filename': filename, 'subtitles': [] if raw.startswith('local:') else fetch_stremio_subtitles(raw), 'suggestion': guess_search(filename)})
+                self.send_json({**{k:v for k,v in metadata.items() if k not in ('headers','audio_url','audio_headers','title')}, 'filename': filename, 'subtitles': [] if raw.startswith('local:') else fetch_stremio_subtitles(raw), 'suggestion': guess_search(filename)})
             elif parsed.path == '/stream':
                 self.handle_stream(query)
             elif parsed.path == '/api/subtitles/vtt':
